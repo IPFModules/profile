@@ -20,7 +20,7 @@ defined("ICMS_ROOT_PATH") or die("ICMS root path not defined");
 $modversion = array(
 /**  General Information  */
 	'name'						=> _MI_PROFILE_NAME,
-	'version'					=> 2.2,
+	'version'					=> 2.3,
 	'description'				=> _MI_PROFILE_DESC,
 	'author'					=> "fiammybe",
 	'credits'					=> "The XOOPS Project, The ImpressCMS Project, The SmartFactory, Ackbarr, Komeia, vaughan, alfred, m0nty, phoenyx, Jan Pedersen, Marcello Brandao, Sina Asghari, Gustavo Pilla.",
