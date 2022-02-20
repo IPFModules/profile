@@ -22,12 +22,12 @@ $modversion = array(
 	'name'						=> _MI_PROFILE_NAME,
 	'version'					=> 2.2,
 	'description'				=> _MI_PROFILE_DESC,
-	'author'					=> "m0nty, phoenyx, Jan Pedersen, Marcello Brandao, Sina Asghari, Gustavo Pilla.",
-	'credits'					=> "The XOOPS Project, The ImpressCMS Project, The SmartFactory, Ackbarr, Komeia, vaughan, alfred.",
+	'author'					=> "fiammybe",
+	'credits'					=> "The XOOPS Project, The ImpressCMS Project, The SmartFactory, Ackbarr, Komeia, vaughan, alfred, m0nty, phoenyx, Jan Pedersen, Marcello Brandao, Sina Asghari, Gustavo Pilla.",
 	'help'						=> "",
 	'license'					=> "GNU General Public License (GPL)",
 	'official'					=> 1,
-	'dirname'					=> basename(dirname(__FILE__)),
+	'dirname'					=> basename(__DIR__),
 	'modname'					=> 'profile',
 
 /**  Images information  */
@@ -36,11 +36,11 @@ $modversion = array(
 	'image'						=> "images/icon_big.png", /* for backward compatibility */
 
 /**  Development information */
-	'status_version'			=> "Final",
-	'status'					=> "Final",
-	'date'						=> "02 Sept 2013",
+	'status_version'			=> "Beta",
+	'status'					=> "Beta",
+	'date'						=> "20 Feb 2022",
 	'author_word'				=> "",
-	'warning'					=> _CO_ICMS_WARNING_FINAL,
+	'warning'					=> _CO_ICMS_WARNING_BETA,
 
 /** Contributors */
 	'developer_website_url'		=> "http://www.impresscms.org",
