@@ -74,7 +74,7 @@ class mod_profile_Field extends icms_ipf_Object {
 		$caption = $this->getVar('field_title');
 		$caption = defined($caption) ? constant($caption) : $caption;
 		$name = $this->getVar('field_name', 'e');
-		$options = unserialize($this->getVar('field_options', 'n'),);
+		$options = unserialize($this->getVar('field_options', 'n'));
 		if ($this->getVar('field_type') != "image" && is_array($options)) {
 			asort($options);
 
@@ -417,7 +417,7 @@ class mod_profile_Field extends icms_ipf_Object {
 	 * @staticvar icms_ipf_Controller $controller
 	 * @return string linked icon to delete the object
 	 */
-	public function getDeleteButtonForDisplay(): string
+	public function getDeleteButtonForDisplay()
     {
 		static $controller = null;
 		if ($this->getVar('system') == 1) return;
