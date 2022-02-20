@@ -298,4 +298,3 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 		return true;
 	}
 }
-?>
