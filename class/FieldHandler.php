@@ -34,7 +34,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 * @param icms_member_user_Object $thisUser
 	 * @return array of profile fields
 	 */
-	public function getProfileFields(&$thisUser) {
+	public function getProfileFields(&$thisUser): array
+    {
 		// get handlers
 		$category_handler = icms_getModuleHandler('category', basename(dirname(__FILE__, 2)), 'profile');
 		$profile_handler = icms_getModuleHandler('profile', basename(dirname(__FILE__, 2)), 'profile');
@@ -80,7 +81,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return array
 	 */
-	public function &loadFields($force_update = false) {
+	public function &loadFields($force_update = false): array
+    {
 		static $fields = array();
 
 		if ($force_update || count($fields) == 0) {
@@ -100,7 +102,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return bool FALSE if failed, TRUE if already present and unchanged or successful
 	 */
-	public function insert(&$obj, $force = false, $checkObject = true, $debug = false) {
+	public function insert(&$obj, $force = false, $checkObject = true, $debug = false): bool
+    {
 		$profile_handler = icms_getmodulehandler('profile', basename(dirname(__FILE__, 2)), 'profile');
 
 		$obj->cleanVars();
@@ -201,7 +204,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	* @param bool $force
 	* @return bool FALSE if failed.
 	**/
-	public function delete(&$obj, $force = false) {
+	public function delete(&$obj, $force = false): bool
+    {
 		$profile_handler = icms_getmodulehandler('profile', basename(dirname(__FILE__, 2)), 'profile');
 		$sql = "ALTER TABLE ".$profile_handler->table." DROP ".$obj->getVar('field_name', 'n');
 		if ($this->db->query($sql)) {
@@ -224,7 +228,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return array
 	 */
-	public function getUserVars() {
+	public function getUserVars(): array
+    {
 		return array('uid', 'uname', 'name', 'email', 'url', 'user_avatar', 'user_regdate', 'user_icq', 'user_from',
 			         'user_sig', 'user_viewemail', 'actkey', 'user_aim', 'user_yim', 'user_msnm', 'pass', 'posts', 'attachsig',
 			         'rank', 'level', 'theme', 'timezone_offset', 'last_login', 'umode', 'uorder', 'notify_method',
@@ -237,7 +242,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return array of field types
 	 */
-	public function getFieldTypeArray() {
+	public function getFieldTypeArray(): array
+    {
 		if (!$this->_fieldTypeArray) {
 			$this->_fieldTypeArray["checkbox"] = _AM_PROFILE_FIELD_TYPE_CHECKBOX;
 			$this->_fieldTypeArray["date"] = _AM_PROFILE_FIELD_TYPE_DATE;
@@ -271,7 +277,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return array list of categories
 	 */
-	public function getCategoriesArray() {
+	public function getCategoriesArray(): array
+    {
 		if (!$this->_categoriesArray) {
 			$profile_category_handler = icms_getModuleHandler('category', basename(dirname(__FILE__, 2)), 'profile');
 			$criteria = new icms_db_criteria_Compo();
@@ -291,7 +298,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 * @param mod_profile_Field $obj object
 	 * @return bool
 	 */
-	protected function afterDelete(&$obj) {
+	protected function afterDelete(&$obj): bool
+    {
 		$imgPath = $this->getImagePath();
 		$imgUrl = $obj->getVar('url');
 		if (!empty($imgUrl)) unlink($imgPath.$imgUrl);
