@@ -74,7 +74,7 @@ class mod_profile_Field extends icms_ipf_Object {
 		$caption = $this->getVar('field_title');
 		$caption = defined($caption) ? constant($caption) : $caption;
 		$name = $this->getVar('field_name', 'e');
-		$options = unserialize($this->getVar('field_options', 'n'));
+		$options = unserialize($this->getVar('field_options', 'n'),);
 		if ($this->getVar('field_type') != "image" && is_array($options)) {
 			asort($options);
 
@@ -293,6 +293,7 @@ class mod_profile_Field extends icms_ipf_Object {
 	 * @return mixed
 	 */
 	public function getValueForSave($value, $oldvalue) {
+        $value = icms_core_DataFilter::checkVarArray($value);
 		switch ($this->getVar('field_type')) {
 			default:
 			case "textbox":
@@ -311,18 +312,28 @@ class mod_profile_Field extends icms_ipf_Object {
 			case "longdate":
 				return $value;
 			case "date":
-				if ($value != "") return strtotime($value);
-				return $value;
+				if ($value != "") {
+                    return strtotime($value);
+                }
+                else {
+                    return $value;
+                }
 				break;
 			case "datetime":
-				if ($value != "") return strtotime($value['date']) + $value['time'];
-				return $value;
+				if ($value != "") {
+                    return strtotime($value['date']) + $value['time'];
+                }
+                else {
+                    return $value;
+                }
 				break;
 			case "image":
-				if (!isset($_FILES[$_POST['xoops_upload_file'][0]])) return $oldvalue;
+				if (!isset($_FILES[$_POST['xoops_upload_file'][0]])) {
+                    return $oldvalue;
+                }
 
 				$options = unserialize($this->getVar('field_options', 'n'));
-				$dirname = ICMS_UPLOAD_PATH.'/'.basename(dirname(dirname(__FILE__)));
+				$dirname = ICMS_UPLOAD_PATH.'/'.basename(dirname(__FILE__, 2));
 				if (!is_dir($dirname)) mkdir($dirname);
 
 				$uploader = new icms_file_MediaUploadHandler($dirname, array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png'), $options['maxsize']*1024, $options['maxwidth'], $options['maxheight']);
@@ -348,7 +359,8 @@ class mod_profile_Field extends icms_ipf_Object {
 	 *
 	 * @return array
 	 */
-	private function getUserVars() {
+	private function getUserVars(): array
+    {
 		$profile_handler = icms_getModuleHandler('profile', basename(dirname(dirname(__FILE__))), 'profile');
 		return $profile_handler->getUserVars();
 	}
@@ -383,7 +395,8 @@ class mod_profile_Field extends icms_ipf_Object {
 	 *
 	 * @return string field name
 	 */
-	public function getFieldName() {
+	public function getFieldName(): string
+    {
 		return $this->getVar('field_name');
 	}
 
@@ -402,9 +415,10 @@ class mod_profile_Field extends icms_ipf_Object {
 	 * generate delete button
 	 *
 	 * @staticvar icms_ipf_Controller $controller
-	 * @return str linked icon to delete the object
+	 * @return string linked icon to delete the object
 	 */
-	public function getDeleteButtonForDisplay() {
+	public function getDeleteButtonForDisplay(): string
+    {
 		static $controller = null;
 		if ($this->getVar('system') == 1) return;
 		if ($controller === null) $controller = new icms_ipf_Controller($this->handler);
@@ -414,9 +428,10 @@ class mod_profile_Field extends icms_ipf_Object {
 	/**
 	 * generate textbox control to edit weight on acp
 	 *
-	 * @return str textbox control
+	 * @return string textbox control
 	 */
-	public function getField_weightControl() {
+	public function getField_weightControl(): string
+    {
 		$control = new icms_form_elements_Text('', 'field_weight[]', 5, 4, $this->getVar('field_weight'));
 		return $control->render();
 	}
