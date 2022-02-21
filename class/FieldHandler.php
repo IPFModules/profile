@@ -24,7 +24,7 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 * @param icms_db_legacy_Database $db
 	 */
 	public function __construct(&$db) {
-		parent::__construct($db, 'field', 'fieldid', 'field_name', 'field_description', basename(dirname(dirname(__FILE__))));
+		parent::__construct($db, 'field', 'fieldid', 'field_name', 'field_description', basename(dirname(__FILE__, 2)));
 		$this->enableUpload(array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/png'), 5120, 18, 18);
 	}
 
@@ -34,11 +34,12 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 * @param icms_member_user_Object $thisUser
 	 * @return array of profile fields
 	 */
-	public function getProfileFields(&$thisUser) {
+	public function getProfileFields(&$thisUser): array
+    {
 		// get handlers
-		$category_handler = icms_getModuleHandler('category', basename(dirname(dirname(__FILE__))), 'profile');
-		$profile_handler = icms_getModuleHandler('profile', basename(dirname(dirname(__FILE__))), 'profile');
-		$visibility_handler = icms_getModuleHandler('visibility', basename(dirname(dirname(__FILE__))), 'profile');
+		$category_handler = icms_getModuleHandler('category', basename(dirname(__FILE__, 2)), 'profile');
+		$profile_handler = icms_getModuleHandler('profile', basename(dirname(__FILE__, 2)), 'profile');
+		$visibility_handler = icms_getModuleHandler('visibility', basename(dirname(__FILE__, 2)), 'profile');
 
 		$groups = is_object(icms::$user) ? icms::$user->getGroups() : array(ICMS_GROUP_ANONYMOUS);
 		$criteria = new icms_db_criteria_Compo();
@@ -53,11 +54,13 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 		$profile = $profile_handler->get($thisUser->getVar('uid'));
 		unset($category_handler, $visibility_handler, $profile_handler, $criteria);
 
-		$module = icms::handler("icms_module")->getByDirname(basename(dirname(dirname(__FILE__))), TRUE);
+		$module = icms::handler("icms_module")->getByDirname(basename(dirname(__FILE__, 2)), TRUE);
 		$rtn = array();
-		for ($i = 0; $i < count($categories); $i++) {
+        $category_count = count($categories);
+		for ($i = 0; $i < $category_count; $i++) {
 			$first_category = true;
-			for ($j = 0; $j < count($fields); $j++) {
+            $field_count = count($fields);
+			for ($j = 0; $j < $field_count; $j++) {
 				$value = $fields[$j]->getOutputValue($thisUser, $profile);
 				if ($fields[$j]->getVar('field_show') && $fields[$j]->getVar('catid') == $categories[$i]->getVar('catid') && ($module->config['show_empty'] || trim($value) || $value == '0')) {
                     if ($first_category) $rtn[$i]['title'] = $categories[$i]->getVar('cat_title');
@@ -78,7 +81,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return array
 	 */
-	public function &loadFields($force_update = false) {
+	public function &loadFields($force_update = false): array
+    {
 		static $fields = array();
 
 		if ($force_update || count($fields) == 0) {
@@ -98,8 +102,10 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return bool FALSE if failed, TRUE if already present and unchanged or successful
 	 */
-	public function insert(&$obj, $force = false, $checkObject = true, $debug = false) {
-		$profile_handler = icms_getmodulehandler('profile', basename(dirname(dirname(__FILE__))), 'profile');
+
+	public function insert(&$obj, $force = false, $checkObject = true, $debug = false): bool
+    {
+		$profile_handler = icms_getmodulehandler('profile', basename(dirname(__FILE__, 2)), 'profile');
 
 		$obj->cleanVars();
 		$defaultstring = "";
@@ -186,7 +192,7 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 
 	public function filterSteps() {
 		if(!count($this->_stepsArray)) {
-			$step_handler = icms_getModuleHandler("regstep", basename(dirname(dirname(__FILE__))), "profile");
+			$step_handler = icms_getModuleHandler("regstep", basename(dirname(__FILE__, 2)), "profile");
 			$this->_stepsArray = $step_handler->getList();
 		}
 		return $this->_stepsArray;
@@ -199,13 +205,14 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	* @param bool $force
 	* @return bool FALSE if failed.
 	**/
-	public function delete(&$obj, $force = false) {
-		$profile_handler = icms_getmodulehandler('profile', basename(dirname(dirname(__FILE__))), 'profile');
+	public function delete(&$obj, $force = false): bool
+    {
+		$profile_handler = icms_getmodulehandler('profile', basename(dirname(__FILE__, 2)), 'profile');
 		$sql = "ALTER TABLE ".$profile_handler->table." DROP ".$obj->getVar('field_name', 'n');
 		if ($this->db->query($sql)) {
 			if (!parent::delete($obj, $force)) return false;
 			if ($obj->getVar('field_show') || $obj->getVar('field_edit')) {
-				$profile_module = icms::handler('icms_module')->getByDirname(basename(dirname(dirname(__FILE__))));
+				$profile_module = icms::handler('icms_module')->getByDirname(basename(dirname(__FILE__, 2)));
 				if (is_object($profile_module)) {
 					// Remove group permissions
 					$criteria = new icms_db_criteria_Compo(new icms_db_criteria_Item('gperm_modid', $profile_module->getVar('mid')));
@@ -222,7 +229,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return array
 	 */
-	public function getUserVars() {
+	public function getUserVars(): array
+    {
 		return array('uid', 'uname', 'name', 'email', 'url', 'user_avatar', 'user_regdate', 'user_icq', 'user_from',
 			         'user_sig', 'user_viewemail', 'actkey', 'user_aim', 'user_yim', 'user_msnm', 'pass', 'posts', 'attachsig',
 			         'rank', 'level', 'theme', 'timezone_offset', 'last_login', 'umode', 'uorder', 'notify_method',
@@ -235,7 +243,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return array of field types
 	 */
-	public function getFieldTypeArray() {
+	public function getFieldTypeArray(): array
+    {
 		if (!$this->_fieldTypeArray) {
 			$this->_fieldTypeArray["checkbox"] = _AM_PROFILE_FIELD_TYPE_CHECKBOX;
 			$this->_fieldTypeArray["date"] = _AM_PROFILE_FIELD_TYPE_DATE;
@@ -269,9 +278,10 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 *
 	 * @return array list of categories
 	 */
-	public function getCategoriesArray() {
+	public function getCategoriesArray(): array
+    {
 		if (!$this->_categoriesArray) {
-			$profile_category_handler = icms_getModuleHandler('category', basename(dirname(dirname(__FILE__))), 'profile');
+			$profile_category_handler = icms_getModuleHandler('category', basename(dirname(__FILE__, 2)), 'profile');
 			$criteria = new icms_db_criteria_Compo();
 			$criteria->setSort('cat_title');
 			$criteria->setOrder('ASC');
@@ -289,10 +299,12 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 	 * @param mod_profile_Field $obj object
 	 * @return bool
 	 */
-	protected function afterDelete(&$obj) {
+	protected function afterDelete(&$obj): bool
+    {
 		$imgPath = $this->getImagePath();
 		$imgUrl = $obj->getVar('url');
 		if (!empty($imgUrl)) unlink($imgPath.$imgUrl);
 		return true;
 	}
 }
+
