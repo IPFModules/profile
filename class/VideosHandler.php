@@ -19,7 +19,7 @@ class mod_profile_VideosHandler extends icms_ipf_Handler {
 	 * @param icms_db_legacy_Database $db database object
 	 */
 	public function __construct(&$db) {
-		parent::__construct($db, 'videos', 'videos_id', 'video_title', '', basename(dirname(dirname(__FILE__))));
+		parent::__construct($db, 'videos', 'videos_id', 'video_title', '', basename(dirname(__FILE__, 2)));
 	}
 
 	/**
@@ -62,7 +62,8 @@ class mod_profile_VideosHandler extends icms_ipf_Handler {
 	 * @param int $videos_id ID of a single video to retrieve
 	 * @return array of videos
 	 */
-	public function getVideos($start = 0, $limit = 0, $uid_owner = false, $videos_id = false) {
+	public function getVideos($start = 0, $limit = 0, $uid_owner = false, $videos_id = false): array
+    {
 		$criteria = $this->getVideosCriteria($start, $limit, $uid_owner, $videos_id);
 		$ret = $this->getObjects($criteria, true, false);
 		return $ret;
@@ -74,7 +75,8 @@ class mod_profile_VideosHandler extends icms_ipf_Handler {
 	 *
 	 * @return bool true if he can false if not
 	 */
-	public function userCanSubmit() {
+	public function userCanSubmit(): bool
+    {
 		return is_object(icms::$user);
 	}
 
@@ -88,10 +90,10 @@ class mod_profile_VideosHandler extends icms_ipf_Handler {
 	 */
 	protected function afterInsert(&$obj) {
 		$thisUser = icms::handler("icms_member")->getUser($obj->getVar('uid_owner'));
-		$module = icms::handler("icms_module")->getByDirname(basename(dirname(dirname(__FILE__))), TRUE);
+		$module = icms::handler("icms_module")->getByDirname(basename(dirname(__FILE__, 2)), TRUE);
 		$tags['VIDEO_TITLE'] = $obj->getVar('video_title');
 		$tags['VIDEO_OWNER'] = $thisUser->getVar('uname');
-		$tags['VIDEO_URL'] = ICMS_URL.'/modules/'.basename(dirname(dirname(__FILE__))).'/videos.php?uid='.$obj->getVar('uid_owner');
+		$tags['VIDEO_URL'] = ICMS_URL.'/modules/'.basename(dirname(__FILE__, 2)).'/videos.php?uid='.$obj->getVar('uid_owner');
 		icms::handler('icms_data_notification')->triggerEvent('videos', $obj->getVar('uid_owner'), 'new_video', $tags, array(), $module->getVar('mid'));
 
 		return true;
