@@ -75,7 +75,7 @@ function addVisibility($fieldid, $user_groups = array(ICMS_GROUP_ADMIN), $profil
 function profile_db_upgrade_1() {
 	icms_loadLanguageFile('core', 'user');
 	icms_loadLanguageFile('core', 'notification');
-	
+
 	addStep(_MI_PROFILE_CAT_BASEINFO, '', 1, 0);
 	addStep(_MI_PROFILE_CAT_EXTINFO, '', 2, 1);
 
@@ -118,7 +118,7 @@ function profile_db_upgrade_1() {
 	$fieldid = addField('notify_mode',     _NOT_NOTIFYMODE,          '', 3, 'select',   3, 8,  1, $notify_mode_options,   0, 0);
 	$fieldid = addField('notify_method',   _NOT_NOTIFYMETHOD,        '', 3, 'select',   3, 9,  1, $notify_method_options, 0, 0);
 	$fieldid = addField('timezone_offset', _US_TIMEZONE,             '', 3, 'timezone', 1, 10, 1, array(),                2, 0);
-	$fieldid = addField('user_viewoid',    _US_ALLOWVIEWEMAILOPENID, '', 3, 'yesno',    3, 11, 0, array(),                1, 1);
+	//$fieldid = addField('user_viewoid',    _US_ALLOWVIEWEMAILOPENID, '', 3, 'yesno',    3, 11, 0, array(),                1, 1);
 	$fieldid = addField('url',             _US_WEBSITE,              '', 4, 'url',      1, 1,  1, array(),                1, 255);
 	addVisibility($fieldid, array(ICMS_GROUP_ADMIN, ICMS_GROUP_USERS), 0);
 	$fieldid = addField('posts',           _US_POSTS,                '', 4, 'textbox',  3, 2,  0, array(),                0, 255);
@@ -129,8 +129,6 @@ function profile_db_upgrade_1() {
 	addVisibility($fieldid, array(ICMS_GROUP_ADMIN, ICMS_GROUP_USERS), 0);
 	$fieldid = addField('last_login',      _US_LASTLOGIN,            '', 4, 'datetime', 3, 5,  0, array(),                0, 10);
 	addVisibility($fieldid, array(ICMS_GROUP_ADMIN, ICMS_GROUP_USERS), 0);
-	$fieldid = addField('openid',          _US_OPENID_FORM_CAPTION,  '', 4, 'textbox',  1, 6,  0, array(),                1, 255);
-	addVisibility($fieldid, array(ICMS_GROUP_ADMIN), 0);
 	$fieldid = addField('user_sig',        _US_SIGNATURE,            '', 4, 'dhtml',    1, 7,  1, array(),                0, 0);
 	addVisibility($fieldid, array(ICMS_GROUP_ADMIN, ICMS_GROUP_USERS), 0);
 
@@ -167,12 +165,39 @@ function profile_db_upgrade_2() {
 	$profile_field_handler->updateAll('url', 'username.gif', new icms_db_criteria_Compo(new icms_db_criteria_Item('field_name', 'name')));
 	$profile_field_handler->updateAll('url', 'ym.gif', new icms_db_criteria_Compo(new icms_db_criteria_Item('field_name', 'user_yim')));
 
-	// update existing fields
-	$profile_field_handler->updateAll('field_type', 'url', new icms_db_criteria_Compo(new icms_db_criteria_Item('field_name', 'url')));
+	// update existing fields - remove openid references since OpenID is no longer supported
 	$profile_field_handler->updateAll('field_type', 'location', new icms_db_criteria_Compo(new icms_db_criteria_Item('field_name', 'user_from')));
-	$profile_field_handler->updateAll('field_type', 'openid', new icms_db_criteria_Compo(new icms_db_criteria_Item('field_name', 'openid')));
-	$profile_field_handler->updateAll('field_edit', '0', new icms_db_criteria_Compo(new icms_db_criteria_Item('field_name', '("posts", "openid", "user_viewoid")', 'IN')));
+	$profile_field_handler->updateAll('field_edit', '0', new icms_db_criteria_Compo(new icms_db_criteria_Item('field_name', '"posts"', 'IN')));
 	$profile_field_handler->updateAll('system', '1', new icms_db_criteria_Compo(new icms_db_criteria_Item('field_name', '("' . implode('", "', $profile_field_handler->getUserVars()).'")', 'IN')));
+}
+
+/**
+ * Upgrade function for profile module - removes OpenID fields from database.
+ * This upgrade should be called when OpenID functionality is removed from the system.
+ * It safely handles existing openid and user_viewoid columns in older installations by dropping them.
+ *
+ * @return bool TRUE on success, FALSE on failure
+ */
+function profile_db_upgrade_3() {
+	global $xoopsDB;
+
+	// Remove openid column if it exists (for backward compatibility)
+	if ($xoopsDB->queryF("SHOW COLUMNS FROM `{$xoopsDB->prefix('users')}` LIKE 'openid'")) {
+		$result = $xoopsDB->getRowsNum($xoopsDB->queryF("SHOW COLUMNS FROM `{$xoopsDB->prefix('users')}` LIKE 'openid'"));
+		if ($result > 0) {
+			$xoopsDB->queryF("ALTER TABLE `{$xoopsDB->prefix('users')}` DROP COLUMN `openid`");
+		}
+	}
+
+	// Remove user_viewoid column if it exists (for backward compatibility)
+	if ($xoopsDB->queryF("SHOW COLUMNS FROM `{$xoopsDB->prefix('users')}` LIKE 'user_viewoid'")) {
+		$result = $xoopsDB->getRowsNum($xoopsDB->queryF("SHOW COLUMNS FROM `{$xoopsDB->prefix('users')}` LIKE 'user_viewoid'"));
+		if ($result > 0) {
+			$xoopsDB->queryF("ALTER TABLE `{$xoopsDB->prefix('users')}` DROP COLUMN `user_viewoid`");
+		}
+	}
+
+	return true;
 }
 
 function icms_module_update_profile(&$module, $oldversion = null, $dbversion = null) {

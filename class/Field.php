@@ -167,10 +167,6 @@ class mod_profile_Field extends icms_ipf_Object {
 					$element->setDescription($this->getOutputValue($user, $profile));
 				}
 				break;
-			case "openid":
-				if ($icmsConfigAuth['auth_openid'] != 1) {$element = NULL; break;}
-				$element = new icms_form_elements_Text($caption, $name, 35, $this->getVar('field_maxlength'), $value);
-				break;
 			case "textbox":
 			default:
 				$element = new icms_form_elements_Text($caption, $name, 35, $this->getVar('field_maxlength'), $value);
@@ -270,10 +266,6 @@ class mod_profile_Field extends icms_ipf_Object {
 			case "email":
 				if ($value == "") return '';
 				if ($user->getVar('user_viewemail') || (is_object(icms::$user) && (icms::$user->isAdmin() || icms::$user->getVar('uid') == $user->getVar('uid')))) return '<a href="mailto:'.$value.'">'.$value.'</a>';
-				return '';
-			case "openid":
-				if ($value == "") return '';
-				if ($icmsConfigAuth['auth_openid'] == 1 && ($user->getVar('user_viewoid') || (is_object(icms::$user) && (icms::$user->isAdmin() || icms::$user->getVar('uid') == $user->getVar('uid'))))) return $value;
 				return '';
 			case "textbox":
 			case "theme":

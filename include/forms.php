@@ -171,28 +171,7 @@ function getUserForm(&$user, $profile = false, $action = false) {
         $elements[0][] = array('element' => new icms_form_elements_Text(_US_NICKNAME, 'uname', 25, 75, $user->getVar('uname', 'e')), 'required' => 1);
         $weights[0][] = 0;
         $elements[0][] = array('element' => new icms_form_elements_Text(_MD_PROFILE_EMAIL, 'email', 30, 60, $user->getVar('email')), 'required' => 1);
-        $weights[0][] = 0;
-    } else {
-        $elements[0][] = array('element' => new icms_form_elements_Label(_US_LOGIN_NAME, $user->getVar('login_name', 'e')), 'required' => 0);
-        $weights[0][] = 0;
-        if ($icmsConfigUser['allow_chguname'] == 1) {
-            $elements[0][] = array('element' => new icms_form_elements_Text(_US_NICKNAME, 'uname', 25, 75, $user->getVar('uname', 'e')), 'required' => 1);
-        } else {
-            $elements[0][] = array('element' => new icms_form_elements_Label(_US_NICKNAME, $user->getVar('uname')), 'required' => 0);
-        }
-		$weights[0][] = 0;
-		$elements[0][] = array('element' => new icms_form_elements_Label(_MD_PROFILE_EMAIL, $user->getVar('email')), 'required' => 0);
-		$weights[0][] = 0;
-    }
-
-    if ($icmsConfigAuth['auth_openid'] == 1) {
-        $openid_tray = new icms_form_elements_Tray(_MD_PROFILE_OPENID, '<br />');
-        $openid_tray->addElement(new icms_form_elements_Text('', 'openid', 30, 255, $user->getVar('openid')));
-        $openid_checkbox = new icms_form_elements_Checkbox('', 'user_viewoid', $user->getVar('user_viewoid'));
-        $openid_checkbox->addOption('1', _MD_PROFILE_OPENID_VIEW);
-        $openid_tray->addElement($openid_checkbox);
-        $elements[0][] = array('element' => $openid_tray, 'required' => 0);
-        $weights[0][] = 0;
+    $weights[0][] = 0;
     }
 
     if (icms::$user->isAdmin() && $user->getVar('uid') != icms::$user->getVar('uid')) {

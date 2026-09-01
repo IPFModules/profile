@@ -226,8 +226,8 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 		return array('uid', 'uname', 'name', 'email', 'url', 'user_avatar', 'user_regdate', 'user_icq', 'user_from',
 			         'user_sig', 'user_viewemail', 'actkey', 'user_aim', 'user_yim', 'user_msnm', 'pass', 'posts', 'attachsig',
 			         'rank', 'level', 'theme', 'timezone_offset', 'last_login', 'umode', 'uorder', 'notify_method',
-			         'notify_mode', 'user_occ', 'bio', 'user_intrest', 'user_mailok', 'language', 'openid', 'salt',
-			         'user_viewoid', 'pass_expired', 'enc_type', 'login_name');
+			         'notify_mode', 'user_occ', 'bio', 'user_intrest', 'user_mailok', 'language', 'salt',
+			         'pass_expired', 'enc_type', 'login_name');
 	}
 
 	/**
@@ -258,7 +258,6 @@ class mod_profile_FieldHandler extends icms_ipf_Handler {
 			$this->_fieldTypeArray["url"] = _AM_PROFILE_FIELD_TYPE_URL;
 			$this->_fieldTypeArray["location"] = _AM_PROFILE_FIELD_TYPE_LOCATION;
 			$this->_fieldTypeArray["email"] = _AM_PROFILE_FIELD_TYPE_EMAIL;
-			$this->_fieldTypeArray["openid"] = _AM_PROFILE_FIELD_TYPE_OPENID;
 			asort($this->_fieldTypeArray);
 		}
 		return $this->_fieldTypeArray;

@@ -1,5 +1,11 @@
 # Profile Changelog
 
+## v2.4
+Release date : TBD
+
+### Removed
+* OpenID support has been removed from the profile module. The `openid` and `user_viewoid` columns will be dropped in a future database upgrade.
+
 ## v2.3
 Release date : 15 Jul 2020
 
