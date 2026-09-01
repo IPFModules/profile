@@ -20,7 +20,7 @@ defined("ICMS_ROOT_PATH") or die("ICMS root path not defined");
 $modversion = array(
 /**  General Information  */
 	'name'						=> _MI_PROFILE_NAME,
-	'version'					=> "2.4",
+	'version'					=> "3.0",
 	'description'				=> _MI_PROFILE_DESC,
 	'author'					=> "fiammybe",
 	'credits'					=> "The XOOPS Project, The ImpressCMS Project, The SmartFactory, Ackbarr, Komeia, vaughan, alfred,m0nty, phoenyx, Jan Pedersen, Marcello Brandao, Sina Asghari, Gustavo Pilla.",
@@ -36,11 +36,11 @@ $modversion = array(
 	'image'						=> "images/icon_big.png", /* for backward compatibility */
 
 /**  Development information */
-	'status_version'			=> "final",
-	'status'					=> "Final",
-	'date'						=> "24 Dec 2020",
+	'status_version'			=> "3.0 alpha",
+	'status'					=> "alpha",
+	'date'						=> "01 Sep 2026",
 	'author_word'				=> "",
-	'warning'					=> _CO_ICMS_WARNING_FINAL,
+	'warning'					=> _CO_ICMS_WARNING_ALPHA,
 
 /** Contributors */
 	'developer_website_url'		=> "https://www.impresscms.org",
@@ -118,7 +118,7 @@ if (is_object(icms::$module) && icms::$module->getVar('dirname') == $modversion[
 $modversion['blocks'][1] = array(
 	'file'        => 'blocks.php',
 	'name'        => _MI_PROFILE_BLOCKS_FRIENDS,
-    'description' => '', 
+    'description' => '',
 	'show_func'   => 'b_profile_friends_show',
 	'edit_func'   => 'b_profile_friends_edit',
 	'options'     => '5',
@@ -127,7 +127,7 @@ $modversion['blocks'][1] = array(
 $modversion['blocks'][] = array(
 	'file'        => 'blocks.php',
 	'name'        => _MI_PROFILE_BLOCKS_USERMENU,
-    'description' => '', 
+    'description' => '',
 	'show_func'   => 'b_profile_usermenu_show',
 	'template'    => 'profile_block_usermenu.html');
 

@@ -64,10 +64,6 @@ switch ($op) {
 		} else {
 			if ($icmsConfigUser['allow_chguname'] == 1) $edituser->setVar('uname', $uname);
 		}
-		if ($icmsConfigAuth['auth_openid'] == 1) {
-			$edituser->setVar('openid', icms_core_DataFilter::stripSlashesGPC(trim($_POST['openid'])));
-			$edituser->setVar('user_viewoid', isset($_POST['user_viewoid']) ? (int)$_POST['user_viewoid'] : 0);
-		}
 
 		// Dynamic fields
 		$profile_handler = icms_getmodulehandler('profile', basename(dirname(__FILE__)), 'profile');

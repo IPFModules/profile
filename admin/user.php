@@ -37,7 +37,7 @@ switch($op) {
 		$form->display();
 		echo "<br />\n";
 		$user_count = $member_handler->getUserCount(new icms_db_criteria_Item('level', '-1'));
-			if(count($user_count)>1){
+				if ($user_count > 1) {
 				$form = new icms_form_Theme(_AM_PROFILE_REMOVEDUSERS, 'form', 'user.php');
 				$form->addElement(new icms_form_elements_select_User(_AM_PROFILE_SELECTUSER, 'id', false, false, false, false, true, true));
 				$form->addElement(new icms_form_elements_Hidden('op', 'editordelete'));
@@ -109,10 +109,6 @@ switch($op) {
 		$user->setVar('uname', $uname);
 		$user->setVar('login_name', $login_name);
 		$user->setVar('email', $email);
-		if ($icmsConfigAuth['auth_openid'] == 1) {
-			$user->setVar('openid', trim($_POST['openid']));
-			$user->setVar('user_viewoid', isset($_POST['user_viewoid']) ? (int)$_POST['user_viewoid'] : 0);
-		}
 
 		if ($stop != '') $errors[] = $stop;
 
